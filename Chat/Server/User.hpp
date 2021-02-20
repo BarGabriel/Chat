@@ -5,11 +5,12 @@
 class User
 {
 public:
-	User(boost::asio::ip::tcp::socket socket, std::string& name);
-	User(User& user);
+	User(boost::asio::io_service& io_service);
 	~User();
 
-	boost::asio::ip::tcp::socket getSocket() { return std::move(_socket); }
+	void setName(std::string& name) { _name = name; }
+
+	boost::asio::ip::tcp::socket& getSocket() { return _socket; }
 	std::string getName() { return _name; }
 
 private:
