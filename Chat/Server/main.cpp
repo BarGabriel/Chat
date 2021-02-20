@@ -1,7 +1,3 @@
-#include <iostream>
-
-#include <boost/asio.hpp>
-
 #include "Server.hpp"
 
 static constexpr int port = 1234;
