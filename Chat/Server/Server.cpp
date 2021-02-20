@@ -21,6 +21,7 @@ void Server::handleAccept(boost::system::error_code ec)
 		std::string name((std::istreambuf_iterator<char>(&buffer)), std::istreambuf_iterator<char>());
 		_newUser->setName(name);
 		std::cout << "New User: " << _newUser->getName() << std::endl;
+		_newUser->doRead();
 		_users.emplace_back(std::move(_newUser));
 	}
 	else
