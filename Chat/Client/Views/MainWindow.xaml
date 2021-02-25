@@ -5,14 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         xmlns:viewModels="clr-namespace:Client.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    
+
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
-    
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Background="#FF8BD364">
+            <Label x:Name="ChatLabel" Content="Chat" FontSize="48" FontFamily="Aharoni" Foreground="White"/>
+        </StackPanel>
+
+        <StackPanel x:Name="AccountLoginPanel" Grid.Row="2" Margin="10,20,10,10" Background="White">
+            <Label x:Name="AccountLoginLabel" Content="Account Login" FontSize="28" FontFamily="Aharoni" HorizontalAlignment="Center" Foreground="#FF8BD364"/>
+            <TextBox x:Name="UserNameTextBox" FontSize="16" Margin="180,20,180,5" materialDesign:HintAssist.Hint="UserName" materialDesign:TextFieldAssist.UnderlineBrush="#FF8BD364" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="#FF8BD364" SelectionBrush="#FF8BD364"/>
+            <Button x:Name="LoginButton" Height="auto" Content="Login" FontSize="24" Margin="180,5,180,5" Style="{StaticResource MaterialDesignFlatButton}" Foreground="#FF8BD364"/>
+        </StackPanel>
+
     </Grid>
 </Window>
