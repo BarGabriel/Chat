@@ -8,7 +8,7 @@ Server::Server(boost::asio::io_service& io_service, uint32_t port) :
 
 void Server::startAccept()
 {
-	_newUser = std::make_unique<User>(_io_service);
+	_newUser = std::make_unique<User>(_io_service, std::bind(&Server::sendBroadcast, this, std::placeholders::_1));
 	_acceptor.async_accept(_newUser->getSocket(), boost::bind(&Server::handleAccept, this, boost::asio::placeholders::error));
 }
 
@@ -29,4 +29,14 @@ void Server::handleAccept(boost::system::error_code ec)
 		std::cout << ec.message() << std::endl;
 	}
 	startAccept();
+}
+
+void Server::sendBroadcast(std::string message)
+{
+	std::cout << message << std::endl;
+
+	for each (const auto& user in _users)
+	{
+		user->write(message);
+	}
 }
