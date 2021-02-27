@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Client.MvvmLightMessages;
+using Client.ViewModels;
+using Client.Views;
+using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +27,15 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
+            Messenger.Default.Register<OpenChatView>(this, ShowChatView);
+        }
+
+        private void ShowChatView(OpenChatView data)
+        {
+            var chatView = new ChatView();
+            chatView.DataContext = new ChatViewModel(data.User);
+            chatView.Show();
+            this.Close();
         }
     }
 }
