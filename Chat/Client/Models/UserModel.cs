@@ -17,5 +17,15 @@ namespace Client.Models
             Socket = socket;
             UserName = userName;
         }
+
+        private void Reader()        
+        {
+            while (true)
+            {
+                byte[] buffer = new byte[1024];
+                Socket.GetStream().Read(buffer, 0, 1024);
+
+            }
+        }
     }
 }

@@ -101,6 +101,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="MvvmLightMessages\OpenChatView.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
