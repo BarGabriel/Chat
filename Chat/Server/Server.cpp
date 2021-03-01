@@ -22,9 +22,8 @@ void Server::handleAccept(boost::system::error_code ec)
 		std::string name;
 		std::getline(is, name, '\0');
 		_newUser->setName(std::move(name));
-		std::cout << "New User: " << _newUser->getName() << std::endl;
-		_newUser->doRead();
-		_users.emplace_back(std::move(_newUser));
+		_newUser->doRead();		
+		_users.emplace_back(std::move(_newUser));		
 	}
 	else
 	{

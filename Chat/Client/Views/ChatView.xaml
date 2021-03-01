@@ -13,27 +13,29 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel x:Name="MessagesPanel" Grid.Row="0">
+        <Grid x:Name="MessagesPanel" Grid.Row="0">
             <ListView x:Name="Messages" ItemsSource="{Binding Path=Messages}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="{Binding Path=From}"/>
-                            <Label Content="{Binding Path=Data}"/>
-                        </StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="5*"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="{Binding Path=From}" FontSize="12" Foreground="#FF8BD364"/>
+                            <Label Grid.Row="1" Content="{Binding Path=Data}" FontSize="16"/>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                
             </ListView>
+        </Grid>
 
-        </StackPanel>
-        
         <Grid x:Name="SenderPanel" Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="MessageTextBox" Grid.Column="0" Margin="5,5,0,5" BorderThickness="1" BorderBrush="#FF8BD364" Text="{Binding Path=TextToSend}"/>
+            <TextBox x:Name="MessageTextBox" Grid.Column="0" Margin="5,5,0,5" Text="{Binding Path=TextToSend}" BorderThickness="1" BorderBrush="#FF8BD364" CaretBrush="#FF8BD364" SelectionBrush="#FF8BD364" materialDesign:TextFieldAssist.UnderlineBrush="#FF8BD364"/>
             <Button x:Name="SendMessageButton" Grid.Column="1" Margin="10,0,10,0" Content="Send" Background="#FF8BD364" BorderBrush="#FF8BD364" Command="{Binding Path=SendCommand}"/>
         </Grid>
     </Grid>

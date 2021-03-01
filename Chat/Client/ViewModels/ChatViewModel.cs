@@ -26,7 +26,17 @@ namespace Client.ViewModels
             }
         }
 
-        public string TextToSend { get; set; }
+        private string _textToSend;
+        public string TextToSend
+        {
+            get { return _textToSend; }
+            set
+            {
+                _textToSend = value;
+                RaisePropertyChanged(() => TextToSend);
+            }
+        }
+
         public RelayCommand SendCommand { get; set; }
 
         public ChatViewModel(UserModel user)
@@ -43,6 +53,7 @@ namespace Client.ViewModels
             {
                 User.SendMessage(TextToSend);
             }
+            TextToSend = String.Empty;
         }
 
         private void OnMessageReceivedHandler(Message newMessage)
