@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Client.Models
 {
@@ -16,11 +17,14 @@ namespace Client.Models
         public TcpClient Socket { get; set; }
         public string UserName { get; set; }
 
+        public Thread ReaderThread { get; set; }
+
         public UserModel(TcpClient socket, string userName)
         {
             Socket = socket;
             UserName = userName;
-            new Thread(() => Reader()).Start();
+            ReaderThread = new Thread(() => Reader());
+            ReaderThread.Start();
         }
 
         public void SendMessage(string message)
@@ -38,7 +42,10 @@ namespace Client.Models
                 Socket.GetStream().Read(buffer, 0, 1024);
                 var data = Encoding.ASCII.GetString(buffer).TrimEnd('\0').Split(':');
                 Message newMessage = new Message(data[0], data[1]);
-                OnMessageReceived(newMessage);
+                Application.Current.Dispatcher.Invoke(()=>
+                {
+                    OnMessageReceived(newMessage);
+                });
             }
         }
     }

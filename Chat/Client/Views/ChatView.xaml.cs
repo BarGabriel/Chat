@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,12 @@ namespace Client.Views
         public ChatView()
         {
             InitializeComponent();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            var viewModel = (ChatViewModel)this.DataContext;            
+            viewModel.Cleanup();
         }
     }
 }

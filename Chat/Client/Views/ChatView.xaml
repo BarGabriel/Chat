@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Client.Views"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ChatView" Height="400" Width="600">
+        Title="ChatView" Height="400" Width="600" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="8*"/>

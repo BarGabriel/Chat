@@ -58,10 +58,13 @@ namespace Client.ViewModels
 
         private void OnMessageReceivedHandler(Message newMessage)
         {
-            Application.Current.Dispatcher.Invoke(() => 
-            {
-                Messages.Add(newMessage);
-            });
+            Messages.Add(newMessage);
+        }
+
+        public override void Cleanup()
+        {
+            User.ReaderThread.Abort();
+            base.Cleanup();
         }
     }
 }
