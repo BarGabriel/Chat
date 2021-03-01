@@ -18,7 +18,9 @@ void Server::handleAccept(boost::system::error_code ec)
 	{
 		boost::asio::streambuf buffer;
 		boost::asio::read_until(_newUser->getSocket(), buffer, '\0');
-		std::string name((std::istreambuf_iterator<char>(&buffer)), std::istreambuf_iterator<char>());
+		std::istream is(&buffer);
+		std::string name;
+		std::getline(is, name, '\0');
 		_newUser->setName(std::move(name));
 		std::cout << "New User: " << _newUser->getName() << std::endl;
 		_newUser->doRead();
