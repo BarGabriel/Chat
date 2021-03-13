@@ -8,7 +8,7 @@ Server::Server(boost::asio::io_service& io_service, uint32_t port) :
 
 void Server::startAccept()
 {
-	_newUser = std::make_unique<User>(_io_service, std::bind(&Server::sendBroadcast, this, std::placeholders::_1));
+	_newUser = std::make_unique<User>(_io_service, std::bind(&Server::sendBroadcast, this, std::placeholders::_1), std::bind(&Server::userDisconnected, this, std::placeholders::_1));
 	_acceptor.async_accept(_newUser->getSocket(), boost::bind(&Server::handleAccept, this, boost::asio::placeholders::error));
 }
 
@@ -40,4 +40,11 @@ void Server::sendBroadcast(std::string message)
 	{
 		user->write(message);
 	}
+}
+
+void Server::userDisconnected(User* disconnectedUser)
+{
+	std::cout << disconnectedUser->getName() << "has disconnected." << std::endl;
+	_users.erase(std::remove_if(_users.begin(), _users.end(),
+		[&](std::unique_ptr<User>& userPtr) { return (userPtr.get() == disconnectedUser); }));
 }

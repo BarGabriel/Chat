@@ -14,10 +14,13 @@ namespace Client.Models
         public delegate void OnMessageReceivedDelegate(Message newMessage);
         public event OnMessageReceivedDelegate OnMessageReceived;
 
-        public TcpClient Socket { get; set; }
-        public string UserName { get; set; }
+        public delegate void CleanUpDelegate();
+        public event CleanUpDelegate CleanUp;
 
-        public Thread ReaderThread { get; set; }
+        private TcpClient Socket { get; set; }
+        private string UserName { get; set; }
+
+        private Thread ReaderThread { get; set; }
 
         public UserModel(TcpClient socket, string userName)
         {
@@ -34,19 +37,32 @@ namespace Client.Models
             Socket.GetStream().Write(buffer, 0, buffer.Length);
         }
 
-        private void Reader()        
+        private void Reader()
         {
             while (true)
             {
-                byte[] buffer = new byte[1024];
-                Socket.GetStream().Read(buffer, 0, 1024);
-                var data = Encoding.ASCII.GetString(buffer).TrimEnd('\0').Split(':');
-                Message newMessage = new Message(data[0], data[1]);
-                Application.Current.Dispatcher.Invoke(()=>
+                try
                 {
-                    OnMessageReceived(newMessage);
-                });
+                    byte[] buffer = new byte[1024];
+                    Socket.GetStream().Read(buffer, 0, 1024);
+                    var data = Encoding.ASCII.GetString(buffer).TrimEnd('\0').Split(':');
+                    Message newMessage = new Message(data[0], data[1]);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        OnMessageReceived(newMessage);
+                    });
+                }
+                catch (Exception)
+                {
+                    CleanUp();
+                }               
             }
+        }
+
+        public void CloseConnection()
+        {
+            ReaderThread.Abort();
+            Socket.Close();
         }
     }
 }

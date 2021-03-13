@@ -43,6 +43,7 @@ namespace Client.ViewModels
         {
             User = user;
             User.OnMessageReceived += new UserModel.OnMessageReceivedDelegate(OnMessageReceivedHandler);
+            User.CleanUp += new UserModel.CleanUpDelegate(Cleanup);
             Messages = new ObservableCollection<Message>();
             SendCommand = new RelayCommand(Send);
         }
@@ -63,7 +64,7 @@ namespace Client.ViewModels
 
         public override void Cleanup()
         {
-            User.ReaderThread.Abort();
+            User.CloseConnection();
             base.Cleanup();
         }
     }

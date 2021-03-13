@@ -1,6 +1,7 @@
 #include "User.hpp"
 
-User::User(boost::asio::io_service& io_service, std::function<void(std::string)>onMessageReceivedFunc) : _socket(io_service), _onMessageReceivedEvent(onMessageReceivedFunc)
+User::User(boost::asio::io_service& io_service, std::function<void(std::string)>onMessageReceivedFunc, std::function<void(User*)> onDisconnectedFunc) :
+	_socket(io_service), _onMessageReceivedEvent(onMessageReceivedFunc), _onDisconnectedEvent(onDisconnectedFunc)
 {
 }
 
@@ -24,6 +25,10 @@ void User::handleRead(boost::system::error_code error, size_t bytes_transferred)
 	}
 	else
 	{
+		if ((boost::asio::error::eof == error) || (boost::asio::error::connection_reset == error)) 		
+		{
+			_onDisconnectedEvent(this);
+		}
 		std::cerr << "Error: " << error.message() << std::endl;
 	}
 

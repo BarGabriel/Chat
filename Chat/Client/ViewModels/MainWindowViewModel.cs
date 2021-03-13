@@ -47,7 +47,10 @@ namespace Client.ViewModels
                             NetworkStream stream = _socket.GetStream();
                             stream.Write(data, 0, data.Length);
                         }
-                        Messenger.Default.Send(new OpenChatView(new UserModel(_socket, UserName)));
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            Messenger.Default.Send(new OpenChatView(new UserModel(_socket, UserName)));
+                        }));
                     }
                     catch (SocketException)
                     {

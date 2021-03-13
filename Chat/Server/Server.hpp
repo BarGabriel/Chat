@@ -10,6 +10,7 @@ private:
 	void startAccept();
 	void handleAccept(boost::system::error_code ec);
 	void sendBroadcast(std::string message);
+	void userDisconnected(User* disconnectedUser);
 
 	uint32_t _port;
 	boost::asio::io_service& _io_service;
