@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,29 @@ using System.Threading.Tasks;
 
 namespace Client.Models
 {
-    public class Message
+    public class Message : ObservableObject
     {
-        public string From { get; set; }
-        public string Data { get; set; }
+        private string _from;
+        public string From
+        {
+            get { return _from; }
+            set
+            {
+                _from = value;
+                RaisePropertyChanged(() => From);
+            }
+        }
+
+        private string _data;
+        public string Data
+        {
+            get { return _data; }
+            set
+            {
+                _data = value;
+                RaisePropertyChanged(() => Data);
+            }
+        }
 
         public Message(string from, string data)
         {

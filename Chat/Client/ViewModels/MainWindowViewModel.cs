@@ -25,26 +25,36 @@ namespace Client.ViewModels
         public MainWindowViewModel()
         {
             _socket = new TcpClient();
-            loginCommand = new RelayCommand(Login);
+            loginCommand = new RelayCommand(() => Login().ConfigureAwait(true));
         }
 
-        private void Login()
+        private async Task Login()
         {
-            if (UserName == null || UserName == "")
+            await Task.Run(() => 
             {
-                MessageBox.Show("User name can not be empty.", "UserName error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                _socket.Connect("127.0.0.1", 1234);
-                if (_socket.Connected)
+                if (UserName == null || UserName == "")
                 {
-                    Byte[] data = System.Text.Encoding.ASCII.GetBytes(UserName + '\0');
-                    NetworkStream stream = _socket.GetStream();
-                    stream.Write(data, 0, data.Length);
+                    MessageBox.Show("User name can not be empty.", "UserName error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                Messenger.Default.Send(new OpenChatView(new UserModel(_socket, UserName)));
-            }
+                else
+                {
+                    try
+                    {
+                        _socket.Connect("127.0.0.1", 1234);
+                        if (_socket.Connected)
+                        {
+                            Byte[] data = System.Text.Encoding.ASCII.GetBytes(UserName + '\0');
+                            NetworkStream stream = _socket.GetStream();
+                            stream.Write(data, 0, data.Length);
+                        }
+                        Messenger.Default.Send(new OpenChatView(new UserModel(_socket, UserName)));
+                    }
+                    catch (SocketException)
+                    {
+                        MessageBox.Show("Unable to login", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            });                   
         }
     }
 }

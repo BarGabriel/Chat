@@ -1,6 +1,6 @@
 #include "User.hpp"
 
-User::User(boost::asio::io_service& io_service) : _socket(io_service)
+User::User(boost::asio::io_service& io_service, std::function<void(std::string)>onMessageReceivedFunc) : _socket(io_service), _onMessageReceivedEvent(onMessageReceivedFunc)
 {
 }
 
@@ -19,7 +19,7 @@ void User::handleRead(boost::system::error_code error, size_t bytes_transferred)
 	if (!error)
 	{
 		std::string message((std::istreambuf_iterator<char>(&_dataBuffer)), std::istreambuf_iterator<char>());
-		std::cout << message << std::endl;
+		_onMessageReceivedEvent(_name + ":" + std::move(message));
 		doRead();
 	}
 	else
